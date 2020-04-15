@@ -1,0 +1,122 @@
+﻿<Window x:Class="Experienceless.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Experienceless"
+        xmlns:cc="clr-namespace:Experienceless.UIControls"
+        xmlns:converter="clr-namespace:Experienceless.Converters"
+        mc:Ignorable="d"
+        
+        Title="Settings" Height="381.899" Width="694.695"
+        Closing="Window_Closing"
+        >
+    <Window.Resources>
+        <ResourceDictionary>
+            
+            <converter:CalcSizeConverter x:Key="calcSizeConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="10" Grid.Row = "0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label   Grid.Row = "0" Grid.Column = "0" x:Name="lblTempPath" Content="Temporary files:" Target="{Binding ElementName=textBoxTempFilePath}"/>
+            <TextBox Grid.Row = "1" Grid.Column = "0" x:Name="textBoxTempFilePath" VerticalAlignment="Center" Margin="0,0,10,0" Text="{Binding temppath}"/>
+            <Button  Grid.Row = "1" Grid.Column = "1" x:Name="btnTempBrowse" Content="Browse..." Click="BtnTempBrowse_Click" VerticalAlignment="Center"/>
+            <Label   Grid.Row = "2" Grid.Column = "0" x:Name="lblDefaultPath" Content="Videos:" Target="{Binding ElementName=textBoxDefaultPath}"/>
+            <TextBox Grid.Row = "3" Grid.Column = "0" x:Name="textBoxDefaultPath" VerticalAlignment="Center" Margin="0,0,10,0" Text="{Binding defaultpath}"/>
+            <Button  Grid.Row = "3" Grid.Column = "1" x:Name="btnDefaultPathBrowse" Content="Browse..." Click="BtnDefaultPathBrowse_Click" VerticalAlignment="Center"/>
+        </Grid>
+        <Grid Margin="10" Grid.Row = "1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row = "0" Grid.Column = "0" x:Name="lblEncPreset" Content="Preset:"/>
+            <ComboBox Grid.Row = "1" Grid.Column = "0" x:Name="cmbEncoderPreset" VerticalAlignment="Center" Margin="0,0,10,0" 
+                      ItemsSource="{Binding lstEncoderProfiles}"
+                      DisplayMemberPath="text"
+                      SelectedValue="{Binding encoderprofile}"
+                      >
+            </ComboBox>
+            <Label Grid.Row = "0" Grid.Column = "1" x:Name="lblLength" Content="Replay length (min):" />
+
+            <TextBox Grid.Row = "1" Grid.Column = "1"  x:Name="txtBoxLength"  VerticalAlignment="Center" Margin="0,0,10,0"
+                                Text="{Binding reclenght}"
+                                /> 
+            <Label Grid.Row = "0" Grid.Column = "2" x:Name="lblBitrate" Content="Bit rate (Mbps):" />
+            <TextBox Grid.Row = "1" Grid.Column = "2"  x:Name="txtBoxMbps" VerticalAlignment="Center" Margin="0,0,10,0"
+                                Text="{Binding bitrate}"
+                                />
+
+
+            <Label Grid.Row = "0" Grid.Column = "3" x:Name="lblResolutions" Content="Resolution:" />
+            <ComboBox Grid.Row = "1" Grid.Column = "3" x:Name="cmbResolution" VerticalAlignment="Center" Margin="0,0,10,0" 
+                      ItemsSource="{Binding lstResolutions}"
+                      SelectedValue="{Binding resolution}"
+                      />
+            <Label Grid.Row = "0" Grid.Column = "4" x:Name="lblFps" Content="FPS:"/>
+            <ComboBox  Grid.Row = "1" Grid.Column = "4" x:Name="cmbFPS" VerticalAlignment="Center" 
+                                 ItemsSource="{Binding lstFPS}"
+                                 SelectedValue="{Binding fps}"
+                                 />
+            <Label Grid.Row = "3" Grid.Column = "0" x:Name="lblFilesize" VerticalAlignment="Center" >
+                <Label.Content>
+                    <MultiBinding Converter="{StaticResource calcSizeConverter}" Mode="OneWay">
+                        <Binding ElementName="txtBoxLength" Path="Text" Mode="OneWay"/>
+                        <Binding ElementName="txtBoxMbps" Path="Text" Mode="OneWay"/>
+                    </MultiBinding>
+                </Label.Content>
+            </Label>
+
+        </Grid>
+        <Grid Margin="10" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label Content="Instant Replay Save" Grid.Row="0" Grid.Column="0" />
+            <Label Content="Toggle Manual Record" Grid.Row="0" Grid.Column="1" />
+            <cc:HotKeyInput x:Name="inpIRHotkey" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" 
+                            
+                            HotKey="{Binding irHotKey}"
+                     />
+            <cc:HotKeyInput x:Name="inpRecordHotkey" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" 
+                            HotKey="{Binding mrHotKey}"
+                     />
+        </Grid>
+        <Grid Margin="10" Grid.Row = "3">
+            <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom" Click="BtnSave_Click"/>
+        </Grid>
+    </Grid>
+</Window>
